@@ -13,20 +13,19 @@ class Php70 < AbstractPhp
   version PHP_VERSION
 
   head PHP_GITHUB_URL, :branch => PHP_BRANCH
-  head do
-    option "with-imap"
-    option "with-fpm"
-    option "with-apcu"
-    option "without-apache"
-    option "with-imagick"
-    option "with-mcrypt"
-    option "enable-opcache"
-    option "with-tidy"
 
-    depends_on "php70-mcrypt"
-    depends_on "php70-opcache"
-    depends_on "php70-tidy"
-  end
+  option "with-imap"
+  option "with-fpm"
+  option "with-apcu"
+  option "without-apache"
+  option "with-imagick"
+  option "with-mcrypt"
+  option "enable-opcache"
+  option "with-tidy"
+
+  depends_on "php70-mcrypt" => :recommended
+  depends_on "php70-opcache" => :recommended
+  depends_on "php70-tidy" -> :recommended
 
   def install_args
     args = super
@@ -79,6 +78,8 @@ class Php70 < AbstractPhp
   def php_version_path
     "70"
   end
+
+
 end
 
 
