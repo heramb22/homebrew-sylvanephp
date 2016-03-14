@@ -22,10 +22,11 @@ class Php70 < AbstractPhp
   option "with-mcrypt"
   option "enable-opcache"
   option "with-tidy"
+  option "with-pear"
 
-  depends_on "php70-mcrypt" => :recommended
-  depends_on "php70-opcache" => :recommended
-  depends_on "php70-tidy" -> :recommended
+  depends_on "php70-mcrypt"
+  depends_on "php70-opcache"
+  depends_on "php70-tidy"
 
   def install_args
     args = super
@@ -39,7 +40,7 @@ class Php70 < AbstractPhp
     #args << "--with-mcrypt"
     args << "--with-mongodb"
     #args << "--with-tidy"
-    #args << "--with-opcache"
+    #args << "--enable-opcache"
 
 
     # dtrace is not compatible with phpdbg: https://github.com/krakjoe/phpdbg/issues/38
