@@ -17,6 +17,18 @@ class Php70 < AbstractPhp
   def install_args
     args = super
 
+    # Sylvane Specific build arguments
+    args << "--enable-apcu"
+    args << "--enable-imagick"
+    args << "--with-imap=#{Formula['imap-uw'].opt_prefix}"
+    args << "--with-imap-ssl=" + Formula['openssl'].opt_prefix.to_s
+    args << "--with-intl"
+    args << "--with-mcrypt"
+    args << "--with-mongodb"
+    args << "--with-tidy"
+    args << "--with-opcache"
+
+
     # dtrace is not compatible with phpdbg: https://github.com/krakjoe/phpdbg/issues/38
     if build.without? "phpdbg"
       args << "--enable-dtrace"
