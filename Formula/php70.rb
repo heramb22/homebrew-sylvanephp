@@ -13,21 +13,34 @@ class Php70 < AbstractPhp
   version PHP_VERSION
 
   head PHP_GITHUB_URL, :branch => PHP_BRANCH
-  head depends_on 'imap-uw' => :build
+  head do
+    option "with-imap"
+    option "with-fpm"
+    option "with-apcu"
+    option "without-apache"
+    option "with-imagick"
+    option "with-mcrypt"
+    option "enable-opcache"
+    option "with-tidy"
+
+    depends_on "php70-mcrypt"
+    depends_on "php70-opcache"
+    depends_on "php70-tidy"
+  end
 
   def install_args
     args = super
 
     # Sylvane Specific build arguments
-    args << "--enable-apcu"
-    args << "--enable-imagick"
-    args << "--with-imap=#{Formula['imap-uw'].opt_prefix}"
-    args << "--with-imap-ssl=" + Formula['openssl'].opt_prefix.to_s
+    #args << "--enable-apcu"
+    #args << "--enable-imagick"
+    #args << "--with-imap=#{Formula['imap-uw'].opt_prefix}"
+    #args << "--with-imap-ssl=" + Formula['openssl'].opt_prefix.to_s
     args << "--with-intl"
-    args << "--with-mcrypt"
+    #args << "--with-mcrypt"
     args << "--with-mongodb"
-    args << "--with-tidy"
-    args << "--with-opcache"
+    #args << "--with-tidy"
+    #args << "--with-opcache"
 
 
     # dtrace is not compatible with phpdbg: https://github.com/krakjoe/phpdbg/issues/38
@@ -43,6 +56,20 @@ class Php70 < AbstractPhp
     end
 
     args << "--enable-zend-signals"
+  end
+
+  def _install
+    super
+
+    # Add new version of php to PATH before currently installed version
+    system "export PATH=\"$(brew --prefix heramb22/sylvanephp/php#{php_version.gsub('.','')})/bin:$PATH\""
+
+    # Launch FPM on startup
+    system "mkdir -p ~/Library/LaunchAgents; cp #{opt_prefix}/#{plist_name}.plist ~/Library/LaunchAgents/; launchctl load -w ~Library/LaunchAgents/#{plist_name}.plist"
+
+    #system "brew install php#{php_version_path}-mcrypt"
+    #system "brew install php#{php_version_path}-opcache"
+    #system "brew install php#{php_version_path}-tidy"
   end
 
   def php_version
