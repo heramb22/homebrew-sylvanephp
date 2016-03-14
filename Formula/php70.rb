@@ -58,8 +58,8 @@ class Php70 < AbstractPhp
     args << "--enable-zend-signals"
   end
 
-  def _install
-    super
+  def install
+    _install
 
     # Add new version of php to PATH before currently installed version
     system "export PATH=\"$(brew --prefix heramb22/sylvanephp/php#{php_version.gsub('.','')})/bin:$PATH\""
