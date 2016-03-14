@@ -13,6 +13,7 @@ class Php70 < AbstractPhp
   version PHP_VERSION
 
   head PHP_GITHUB_URL, :branch => PHP_BRANCH
+  head depends_on 'imap-uw' => :build
 
   def install_args
     args = super
